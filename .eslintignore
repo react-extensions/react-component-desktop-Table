@@ -1,5 +1,6 @@
 # 测试文件
 **/test/**
+iconfong.js
 
 # 特殊文件
 LICENSE
@@ -15,3 +16,10 @@ LICENSE
 *.html
 *.md
 *.tpl
+*.woff2
+*.woff
+*.ttf
+*.svg
+*.eot
+*.pdf
+*.pptx
