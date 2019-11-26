@@ -104,24 +104,27 @@ class Row extends React.Component {
    */
   updateSync(key, value) {
     /* eslint-disable */
-        switch (key) {
-            case HEIGHT:
-                this.setState({trHeight: value});
-                break;
-            case HOVER:
-                this.setState({isHover: value});
-                break;
-            case EXPAND:
-                this.setState({
-                    isCollapse: value.isCollapse,
-                    expandContent: this.props.isFixed ? null : value.expandContent
-                }, this.getExpandRowHeight);
-                break;
-            case EXPAND_HEIGHT:
-                this.setState({expandTrHeight: value});
-                break;
-        }
-        /* eslint-enable */
+    switch (key) {
+      case HEIGHT:
+        this.setState({ trHeight: value });
+        break;
+      case HOVER:
+        this.setState({ isHover: value });
+        break;
+      case EXPAND:
+        this.setState(
+          {
+            isCollapse: value.isCollapse,
+            expandContent: this.props.isFixed ? null : value.expandContent,
+          },
+          this.getExpandRowHeight
+        );
+        break;
+      case EXPAND_HEIGHT:
+        this.setState({ expandTrHeight: value });
+        break;
+    }
+    /* eslint-enable */
   }
 
   /**
@@ -212,44 +215,40 @@ class Row extends React.Component {
     const state = this.state;
 
     return props.isBottom ? (
-              <tr
-                  className="r-tr"
-                  ref={this.getTrHeight}
-                  style={{height: state.trHeight}}
+      <tr
+        className="r-tr"
+        ref={this.getTrHeight}
+        style={{ height: state.trHeight }}
       >
-                  {this.mapRow()}
+        {this.mapRow()}
       </tr>
     ) : (
-              <React.Fragment>
-                  <tr
-className={
-                        cn(
+      <React.Fragment>
+        <tr
+          className={cn(
             'r-tr',
             props.bgColor,
             state.isHover && '_active',
             props.className
           )}
-                      ref={(props.needSync && !props.isFixed) && this.getTrHeight.bind(this)}
-                      onMouseLeave={this.toggleRowBG.bind(this, -1)}
-                      onMouseEnter={this.toggleRowBG.bind(this, 1)}
-                      style={{height: state.trHeight}}
+          ref={props.needSync && !props.isFixed && this.getTrHeight.bind(this)}
+          onMouseLeave={this.toggleRowBG.bind(this, -1)}
+          onMouseEnter={this.toggleRowBG.bind(this, 1)}
+          style={{ height: state.trHeight }}
         >
-                      {mapRow.call(this)}
+          {mapRow.call(this)}
         </tr>
-                  {
-                        !state.isCollapse && (
-                        <tr
-className='r-expand-tr'
-                              ref={this.expandTr}
-                              style={props.isFixed ? {height: state.expandTrHeight} : null}
-                            >
-                              <td colSpan={props.columns.length} className='r-expand-td'>
-                                  {
-                                        !props.isFixed ?
-                                            (
-                                              <ExpandRow
-                                                  content={state.expandContent}
-                                                  rowData={props.rowData}
+        {!state.isCollapse && (
+          <tr
+            className="r-expand-tr"
+            ref={this.expandTr}
+            style={props.isFixed ? { height: state.expandTrHeight } : null}
+          >
+            <td colSpan={props.columns.length} className="r-expand-td">
+              {!props.isFixed ? (
+                <ExpandRow
+                  content={state.expandContent}
+                  rowData={props.rowData}
                 />
               ) : null}
             </td>
@@ -262,12 +261,14 @@ className='r-expand-tr'
 
 const renderTdContentWrap = function(col, child) {
   return (
-      <div
-title={(typeof child === 'string' || typeof child === 'number') ? child : ''}
-          className={cn('r-td-content', (col.width ? '_fill' : ''))}
-          ref={!this.mounted && this.collectWidth.bind(this, col)}
-        >
-          {child}
+    <div
+      title={
+        typeof child === 'string' || typeof child === 'number' ? child : ''
+      }
+      className={cn('r-td-content', col.width ? '_fill' : '')}
+      ref={!this.mounted && this.collectWidth.bind(this, col)}
+    >
+      {child}
     </div>
   );
 };
@@ -279,18 +280,18 @@ const renderTdContent = function(col) {
   return isBottom ? (
     renderTdContentWrap.call(this, col, rowData[col.type || col.prop] || null)
   ) : col.type === 'checkbox' ? (
-              <Checkbox
-                  value={rowKey}
-                  rowData={rowData}
-                  rowIndex={rowIndex}
-                  getCheckboxProps={rowSelection.getCheckboxProps}
-                  checkedIcon={tableConfig.icon.Check}
-                  notCheckedIcon={tableConfig.icon.NotCheck}
+    <Checkbox
+      value={rowKey}
+      rowData={rowData}
+      rowIndex={rowIndex}
+      getCheckboxProps={rowSelection.getCheckboxProps}
+      checkedIcon={tableConfig.icon.Check}
+      notCheckedIcon={tableConfig.icon.NotCheck}
     />
   ) : col.type === 'radio' ? null : col.type === 'expand' ? (
-                      <ArrowDown 
-                          className={`_expand-btn ${  isCollapse ? '_right' : '_down'}`}
-                          onClick={this.expand.bind(this, col.content)} />
+    <ArrowDown
+      className={`_expand-btn ${isCollapse ? '_right' : '_down'}`}
+      onClick={this.expand.bind(this, col.content)}
     />
   ) : col.type === 'index' ? (
     rowIndex + 1
@@ -309,12 +310,16 @@ const renderTdContent = function(col) {
 const mapRow = function() {
   return this.props.columns.map((col, j) => {
     return (
-              <td
-key={j}
-                  className={cn('r-td', col.type ? '_align-center' : (col.align ? `_align-${col.align}` : ''), col.className)}
-                  onClick={this.clickRow.bind(this, j, col.prop)}
+      <td
+        key={j}
+        className={cn(
+          'r-td',
+          col.type ? '_align-center' : col.align ? `_align-${col.align}` : '',
+          col.className
+        )}
+        onClick={this.clickRow.bind(this, j, col.prop)}
       >
-                  {renderTdContent.call(this, col)}
+        {renderTdContent.call(this, col)}
       </td>
     );
   });

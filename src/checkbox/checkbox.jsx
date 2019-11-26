@@ -57,17 +57,18 @@ class Checkbox extends PureComponent {
           disabled ? ' _disabled' : ''
         }`}
         {...rest}
+      >
         <span className="r-checkbox-inner">
           <input
-                  type='checkbox'
-                  className='r-checkbox'
-                  onChange={this.toggleCheck}
-                  checked={checked}
-                  disabled={disabled}
-                />
-              <Icon className={checked ? ' _checked' : ''} />
-            </span>
-        {children &&  <span className='checkbox-children'>{children}</span>}
+            type="checkbox"
+            className="r-checkbox"
+            onChange={this.toggleCheck}
+            checked={checked}
+            disabled={disabled}
+          />
+          <Icon className={checked ? ' _checked' : ''} />
+        </span>
+        {children && <span className="checkbox-children">{children}</span>}
       </label>
     );
   }
@@ -95,8 +96,7 @@ Checkbox.defaultProps = {
 export default function(props) {
   return (
     <Context.Consumer>
-      {
-                ({onChange, value, isGroup} = {} )=> {
+      {({ onChange, value, isGroup } = {}) => {
         return isGroup ? (
           <Checkbox
             {...props}

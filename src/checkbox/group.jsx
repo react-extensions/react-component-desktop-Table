@@ -44,15 +44,13 @@ class Group extends React.PureComponent {
     const { isControlled, value: stateValue } = this.state;
     const value = isControlled ? propsValue : stateValue;
 
-    return (
-          <Context.Provider value={{
-          onChange: this.onChildChange,
-          value: value,
-          isGroup: true,
-        }}
-              {children}
-      </Context.Provider>
-    );
+    const contextValue = {
+      onChange: this.onChildChange,
+      value,
+      isGroup: true,
+    };
+
+    return <Context.Provider value={contextValue}>{children}</Context.Provider>;
   }
 }
 
