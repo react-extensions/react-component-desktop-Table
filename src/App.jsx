@@ -1,18 +1,41 @@
 import React from 'react';
 import Table from './Core';
+import Tablex from './Table';
 
 const columns = [
+  // {
+  //   type: 'checkbox',
+  // },
   {
     title: 'a',
-    prop: 'a',
+    dataIndex: 'a',
+    freezeWidth: true,
   },
   {
     title: 'b',
-    prop: 'b',
+    dataIndex: 'b',
+    width: 350,
   },
   {
     title: 'c',
-    prop: 'c',
+    dataIndex: 'c',
+    width: 350,
+  },
+  {
+    title: 'e',
+    dataIndex: 'e',
+  },
+  {
+    title: 'f',
+    dataIndex: 'f',
+  },
+  {
+    title: 'g',
+    dataIndex: 'g',
+  },
+  {
+    title: 'h',
+    dataIndex: 'h',
   },
 ];
 const data = [
@@ -22,8 +45,15 @@ const data = [
     c: 'aasdfsdaf',
   },
 ];
+for (let i = 0; i < 1000; i += 1) {
+  data.push({
+    a: i,
+    b: '123213',
+    c: 'aasdfsdaf',
+  });
+}
 function App() {
-  return <Table columns={columns} rows={data} />;
+  return <Tablex columns={columns} dataSource={data} />;
 }
 
 export default App;

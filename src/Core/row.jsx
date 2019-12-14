@@ -4,6 +4,7 @@ import ExpandRow from './expand-row';
 import Checkbox from './checkbox';
 import cn from './utils/classname';
 import tableConfig from './config';
+import Subject from './Subject';
 
 const HOVER = 'HOVER';
 const HEIGHT = 'HEIGHT';
@@ -11,34 +12,6 @@ const EXPAND = 'EXPAND';
 const EXPAND_HEIGHT = 'EXPAND_HEIGHT';
 
 const isIE9 = /MSIE 9/i.test(window.navigator.usergent);
-
-class Subject {
-  constructor(height) {
-    this.observerQueue = [];
-    this.height = height;
-  }
-
-  emit(key, value, vm) {
-    key === HEIGHT && (this.height = value);
-    this.observerQueue.forEach(
-      item => item !== vm && item.updateSync(key, value)
-    );
-  }
-
-  addObserver(observer) {
-    this.observerQueue.push(observer);
-    return function(callback) {
-      this.observerQueue.splice(this.observerQueue.indexOf(observer), 1);
-      callback(this.observerQueue.length);
-    }.bind(this);
-  }
-
-  resize() {
-    this.observerQueue.forEach(item => {
-      item.forceUpdate();
-    });
-  }
-}
 
 class Row extends React.Component {
   constructor(props) {
