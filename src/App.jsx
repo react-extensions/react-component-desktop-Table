@@ -1,41 +1,39 @@
 import React from 'react';
-import Table from './Core';
-import Tablex from './Table';
+import Table from './Table';
 
 const columns = [
-  // {
-  //   type: 'checkbox',
-  // },
+  {
+    type: 'checkbox',
+  },
   {
     title: 'a',
-    dataIndex: 'a',
-    freezeWidth: true,
+    colKey: 'a',
   },
   {
     title: 'b',
-    dataIndex: 'b',
+    colKey: 'b',
     width: 350,
   },
   {
     title: 'c',
-    dataIndex: 'c',
+    colKey: 'c',
     width: 350,
   },
   {
     title: 'e',
-    dataIndex: 'e',
+    colKey: 'e',
   },
   {
     title: 'f',
-    dataIndex: 'f',
+    colKey: 'f',
   },
   {
     title: 'g',
-    dataIndex: 'g',
+    colKey: 'g',
   },
   {
     title: 'h',
-    dataIndex: 'h',
+    colKey: 'h',
   },
 ];
 const data = [
@@ -53,7 +51,7 @@ for (let i = 0; i < 1000; i += 1) {
   });
 }
 function App() {
-  return <Tablex columns={columns} dataSource={data} />;
+  return <Table columns={columns} dataSource={data} />;
 }
 
 export default App;

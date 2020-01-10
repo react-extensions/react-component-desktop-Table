@@ -1,3 +1,6 @@
-import './table.less';
+import './style.less';
+import Table from './Table';
+import config from './config';
 
-export { default } from './Table';
+Table.config = config;
+export default Table;

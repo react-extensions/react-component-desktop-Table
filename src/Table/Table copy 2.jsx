@@ -1,8 +1,8 @@
 import React from 'react';
 import memoizeOne from 'memoize-one';
 import PropTypes from 'prop-types';
-import Row from './row';
-import { checkType, checkStatus } from './const-data';
+import Row from './Row';
+import { checkType, checkStatus } from './constants';
 import cn from './utils/classname';
 import SCROLL_BAR_WIDTH from './utils/getScrollBarWidth';
 import useBigDataRender from '../big-data-render/hook-same-height';
@@ -21,6 +21,7 @@ class Table extends React.Component {
    * 数据预处理
    *
    * */
+  // eslint-disable-next-line react/sort-comp
   initialize(props) {
     this.syncRowMap = {};
     this.tableWidth = { plain: '100%', left: 0, right: 0, total: 0 };
@@ -1105,7 +1106,7 @@ const FixedTableBody = function({
   );
 };
 
-const SplitLayoutTableBody = function({
+const SplitLayoutTableBody = function({c
   parent,
   rows,
   height,

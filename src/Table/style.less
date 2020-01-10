@@ -1,0 +1,309 @@
+@import '../styles/vars.less';
+
+/* 主体 */
+.r-table-container {
+  position: relative;
+  background: #fff;
+  overflow: hidden;
+  transition: opacity cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.3s;
+  // min-height: 200px;
+  &._align-center {
+    text-align: center !important;
+  }
+  &._align-right {
+    text-align: right !important;
+  }
+  &._align-left {
+    text-align: left !important;
+  }
+
+  &._stretch {
+    overflow-x: auto;
+  }
+  .sort-sign .r-icon__arrow-fill {
+    display: block;
+  }
+  .r-icon__arrow-fill {
+    display: inline-block;
+  }
+
+  &._un-complete {
+    .r-th-content,
+    .r-td-content {
+      height: 0;
+      overflow: hidden;
+    }
+  }
+}
+
+// table
+.r-table {
+  border-spacing: 0;
+  table-layout: fixed;
+  width: 100%;
+}
+
+/* 布局 */
+
+.r-plain__table {
+  .r-header__track,
+  .r-body__track {
+    font-size: 0;
+    white-space: nowrap;
+  }
+
+  .r-table-body,
+  .r-table-header,
+  .r-table-right-placeholder {
+    display: inline-block;
+  }
+}
+
+.r-fixed-left__table,
+.r-fixed-right__table {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 26;
+  background-color: #fff;
+  transition: box-shadow ease-out 0.4s;
+
+  .r-table-body {
+    overflow: hidden !important;
+    // transition: height ease .3s;
+  }
+}
+
+.r-fixed-left__table {
+  &._shadow {
+    box-shadow: 0 -3px 10px 0 rgba(0, 0, 0, 0.12);
+  }
+}
+
+.r-fixed-right__table {
+  right: 0;
+  left: auto;
+
+  &._shadow {
+    box-shadow: -4px -3px 10px 0 rgba(0, 0, 0, 0.06);
+  }
+}
+
+.r-fixed-bottom__table {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  background: #fff;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.12);
+  .r-plain__table {
+    overflow-x: hidden;
+    white-space: nowrap;
+    font-size: 0;
+  }
+
+  .r-fixed-right__table._shadow,
+  .r-fixed-left__table._shadow {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.12);
+  }
+}
+
+.r-body__track {
+  overflow: auto;
+}
+
+.r-table-body {
+  min-height: 1px;
+}
+
+.r-table-header,
+.r-header__track {
+  overflow-x: hidden;
+  transition: box-shadow ease-out 0.4s;
+
+  &._shadow {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.12);
+    position: relative;
+  }
+}
+
+/* 标记线 */
+.resize-col-sign {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-left: 1px dashed #888;
+  width: 0;
+  z-index: 11;
+}
+
+/* 排序 */
+.sort-sign {
+  margin-left: 8px;
+  vertical-align: middle !important;
+  display: inline-block;
+  ._icon {
+    display: block;
+    & + ._icon {
+      margin-top: -7px;
+    }
+  }
+  &._asc ._down {
+    color: @themeColor;
+  }
+  &._desc ._up {
+    color: @themeColor;
+  }
+}
+
+/* 细节 */
+
+.r-th {
+  background: #f5f5f5;
+  border-top: 1px solid #e9e9e9;
+  border-bottom: 1px solid #e9e9e9;
+}
+
+.r-td {
+  border-bottom: 1px solid #e9e9e9;
+  overflow: hidden;
+  ._expand-btn {
+    border-width: 5px;
+  }
+}
+
+.r-th,
+.r-td {
+  &._align-center {
+    text-align: center !important;
+  }
+
+  &._align-right {
+    text-align: right !important;
+  }
+
+  &._align-left {
+    text-align: left !important;
+  }
+}
+
+.r-th-content-wrap {
+  position: relative;
+  text-align: center;
+  vertical-align: middle;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.r-th-content,
+.r-td-content {
+  display: inline-block;
+  padding-left: 20px;
+  box-sizing: border-box;
+
+  // 如果用户设置的 列宽， 就会被加上 fill 类名
+  &._fill {
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
+
+.r-th-content {
+  white-space: nowrap;
+}
+
+.r-td-content {
+  white-space: normal;
+  // white-space: nowrap;
+}
+
+.r-tr {
+  transition: background 0.2s;
+  //height: @row-height;
+  font-size: 14px;
+
+  &._darken {
+    background: #fafafa;
+  }
+
+  &._lighten {
+    background: #fff;
+  }
+
+  &._active {
+    background: #d5eaff;
+  }
+  &._disabled {
+    background: #eee;
+    color: #ccc;
+    cursor: not-allowed;
+  }
+}
+
+/* ----------------------- */
+/* ---  用于调整表格列宽  --*/
+/* ----------------------- */
+.r-table-resize-btn {
+  width: 2px;
+  height: 18px;
+  background: #ccc;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  z-index: 20;
+  margin-top: -9px;
+  cursor: col-resize;
+  user-select: none;
+  transition: ease all 0.3s;
+
+  &:hover {
+    background: #1890ff;
+  }
+}
+
+/* ----------------------*/
+/* ------可扩展 tr ------*/
+/* ----------------------*/
+.r-expand-tr {
+  background: #fff;
+  font-size: 14px;
+}
+
+.r-expand-td {
+  // border-top: 2px solid #f9f7f7 !important;
+}
+
+/* ----------------------- */
+/* --  没有数据时的提示   -- */
+/* ------------------------ */
+.r-table-empty-tip-wrap {
+  font-size: 14px;
+  .r-table-empty-tip {
+    padding: 30px 0;
+  }
+}
+
+/* loading */
+
+.r-table-loading-wrap {
+  position: absolute;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.6);
+  transition: background ease 0.3s;
+  .r-icon__loading {
+    z-index: 50;
+    height: 42px;
+    width: 42px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    // transform: translate(-50%, -50%)
+    margin-top: -21px;
+    margin-left: -21px;
+  }
+}
