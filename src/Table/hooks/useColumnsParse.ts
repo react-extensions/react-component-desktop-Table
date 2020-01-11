@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { Column } from '../Table';
+import getColumnMinWidths, { ColMinWidths } from '../utils/getColumnMinWidths';
 
 export interface ParsedColumn extends Column {
   __key: number;
@@ -62,10 +63,8 @@ export default function useColumnsParse(columns: Column[]) {
     const hasRight = fixedRightCols.length > 0;
     const hasFixed = hasLeft || hasRight;
 
-    // this.tableWidth = { plain: '100%', left: 0, right: 0, total: 0 };
-    // this.scrollBarY = 0;
-    // this.scrollBarX = 0;
-    // this.bottomTableHeight = 0; // 底部表格高度
+    // 最小列宽
+    const colMinWidths: ColMinWidths = getColumnMinWidths(allCols);
 
     return {
       fixedLeftCols,

@@ -10,7 +10,7 @@ import classnames from 'classnames';
 // import Row from './Row';
 import SCROLL_BAR_WIDTH from './utils/getScrollBarWidth';
 import useColumnsParse from './hooks/useColumnsParse';
-import getColumnMinWidths, { ColMinWidths } from './utils/getColumnMinWidths';
+import renderTable from './renders/renderTable';
 
 export type Align = 'left' | 'right' | 'center';
 
@@ -85,11 +85,7 @@ const Table = function Table(props: TableProps) {
   const useTileLayout = meta.hasFixed || dragAble || layoutMode === 'tile';
   // 使用分体式布局
   const _useSplitLayout = meta.hasFixed || !!tableHeight || useSplitLayout;
-  // 最小列宽
-  const colMinWidths: ColMinWidths = useMemo(
-    () => getColumnMinWidths(meta.allCols),
-    [meta.allCols]
-  );
+
   /**
    * 根据用户设置,计算表格列宽 及 总宽度
    * */
@@ -165,34 +161,15 @@ const Table = function Table(props: TableProps) {
     setComplete(true);
   }, [computeLayout]);
 
-  const renderTable = useCallback(() => {
-    return (
-      <>
-        {renderTable(
-          renderColumns.call(this, columns.plain),
-          renderTHead.call(this, columns.plain),
-          renderTBody.call(this, columns.plain, rows, 'normal')
-        )}
-        {/* 普通表格 */}
-        {/* {useSplitLayout
-          ? renderSplitLayoutTable.call(this, columns.plain, rows)
-          : renderTable(
-              renderColumns.call(this, columns.plain),
-              renderTHead.call(this, columns.plain),
-              renderTBody.call(this, columns.plain, rows, 'normal')
-            )} */}
-        {/* 左固定表格 */}
-        {/* {hasLeft && renderLeftTable.call(this, columns.left, rows)} */}
-        {/* 右固定表格 */}
-        {/* {hasRight && renderRightTable.call(this, columns.right, rows)} */}
-        {/* {hasBottom && renderBottomTable()} */}
-      </>
-    );
-  }, []);
-
   return (
     <div className={_className} ref={containerRef}>
-      {renderTable()}
+      {renderTable(
+        <ColGroup columns={columns} colWidths={colWidths} />,
+        <TableHeader columns={columns} />,
+        <TableBody columns={columns} />
+      )}
+
+      
     </div>
   );
 };

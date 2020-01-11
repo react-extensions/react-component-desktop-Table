@@ -755,7 +755,7 @@ class Table extends React.Component {
             <Loading />
           </div>
         ) : null}
-        {this.checkState === CHECKBOX ? (
+        
           <Checkbox.Group
             onChange={this.handleRowChecked}
             value={
@@ -766,9 +766,6 @@ class Table extends React.Component {
           >
             {render()}
           </Checkbox.Group>
-        ) : this.checkState === RADIO ? null : (
-          render()
-        )}
       </div>
     );
   }
