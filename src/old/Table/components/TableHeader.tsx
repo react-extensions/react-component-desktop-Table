@@ -6,7 +6,7 @@ export interface TableHeaderProps {
   columns: ParsedColumn[];
 }
 
-const TableHeader = ({ columns }: TableHeaderProps) => {
+function TableHeader({ columns }: TableHeaderProps) {
   return (
     <thead>
       <tr className="r-tr">
@@ -29,7 +29,7 @@ const TableHeader = ({ columns }: TableHeaderProps) => {
       </tr>
     </thead>
   );
-};
+}
 
 TableHeader.defaultProps = {};
 

@@ -21,9 +21,7 @@ export default function getColumnMinWidths(columns: ParsedColumn[]) {
 
     span.setAttribute(
       'style',
-      `white-space:nowrap;overflow:hidden;display:inline-block;width:${
-        width ? `${width}px` : 'auto'
-      }`
+      `white-space:nowrap;overflow:hidden;display:inline-block;width:${width ? `${width}px` : 'auto'}`
     );
 
     // FIXME: 防止注入
@@ -38,15 +36,12 @@ export default function getColumnMinWidths(columns: ParsedColumn[]) {
 
   document.body.appendChild(div);
 
-  const colMinWidths: ColMinWidths = spans.reduce(
-    (result: ColMinWidths, [span, key]) => {
-      // eslint-disable-next-line no-param-reassign
-      result[key] = span.offsetWidth;
+  const colMinWidths: ColMinWidths = spans.reduce((result: ColMinWidths, [span, key]) => {
+    // eslint-disable-next-line no-param-reassign
+    result[key] = span.offsetWidth;
 
-      return result;
-    },
-    {}
-  );
+    return result;
+  }, {});
 
   // document.body.removeChild(div);
   console.timeEnd('getColumnMinWidths');

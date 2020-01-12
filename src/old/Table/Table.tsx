@@ -15,8 +15,8 @@ export type ColumnType = 'checkbox' | 'radio' | 'expand';
 export type ColumnFixed = 'left' | 'right';
 
 export interface Column {
-  title?: string;
-  dataIndex?: string;
+  title: string;
+  dataIndex: string;
   render?: () => void;
   type?: ColumnType;
   width?: number;
@@ -31,7 +31,7 @@ export interface TableProps {
   className?: string;
   align?: Align;
   layoutMode?: LayoutMode;
-  rowKey?: string;
+  rowKey: string;
   useSplitLayout?: boolean;
   dragAble?: boolean;
   loading?: boolean;
@@ -47,8 +47,8 @@ interface Layouts {
 
 type UseLayoutsState = [Layouts, React.Dispatch<React.SetStateAction<Layouts>>];
 
-const Table = (props: TableProps) => {
-  const { columns, className, layoutMode, dragAble, useSplitLayout } = props;
+const Table = function Table(props: TableProps) {
+  const { columns, className, layoutMode, dragAble, loading, useSplitLayout } = props;
   const containerRef: React.MutableRefObject<HTMLDivElement | null> = useRef(null);
   const [complete, setComplete] = useState(false);
   const [layouts, setLayouts]: UseLayoutsState = useState(() => ({
@@ -93,7 +93,7 @@ const Table = (props: TableProps) => {
     <div className={_className} ref={containerRef}>
       {renderTable(
         <ColGroup columns={meta.mainCols} colWidths={layouts.colWidths} />,
-        <TableHeader columns={meta.mainCols} />
+        <TableHeader columns={columns} />
         // <TableBody columns={columns} />
       )}
     </div>
