@@ -1,4 +1,4 @@
-import { ParsedColumn } from '../hooks/useColumnsParse';
+import { ParsedColumn } from './parseColumns';
 
 export interface ColMinWidths {
   [key: string]: number;

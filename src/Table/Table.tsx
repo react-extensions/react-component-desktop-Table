@@ -1,6 +1,6 @@
 import React, { useRef, useMemo, useEffect, useState } from 'react';
 import classnames from 'classnames';
-import useColumnsParse from './hooks/useColumnsParse';
+import parseColumns from './utils/parseColumns';
 import renderTable from './renders/renderTable';
 import TableHeader from './components/TableHeader';
 import ColGroup from './components/ColGroup';
@@ -35,6 +35,8 @@ export interface TableProps {
   useSplitLayout?: boolean;
   dragAble?: boolean;
   loading?: boolean;
+  width?: number;
+  height?: number;
 }
 
 interface Layouts {
@@ -45,13 +47,11 @@ interface Layouts {
   colWidths: ColumnWidths;
 }
 
-type UseLayoutsState = [Layouts, React.Dispatch<React.SetStateAction<Layouts>>];
-
 const Table = (props: TableProps) => {
   const { columns, className, layoutMode, dragAble, useSplitLayout } = props;
-  const containerRef: React.MutableRefObject<HTMLDivElement | null> = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [complete, setComplete] = useState(false);
-  const [layouts, setLayouts]: UseLayoutsState = useState(() => ({
+  const [layouts, setLayouts] = useState<Layouts>(() => ({
     totalTableWidth: 0,
     fixedLeftTableWidth: 0,
     fixedRightTableWidth: 0,
@@ -64,7 +64,7 @@ const Table = (props: TableProps) => {
   // 表格类名
   const _className = useMemo(() => classnames('r-table-container', className), [className]);
 
-  const meta = useColumnsParse(columns);
+  const meta = useMemo(() => parseColumns(columns), [columns]);
   // 使用平铺布局
   // TODO: 是否第一次确定后，以后不可更改
   const useTileLayout = meta.hasFixed || dragAble || layoutMode === 'tile';

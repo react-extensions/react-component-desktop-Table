@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Table from './Table';
 import { Column } from './Table/Table';
 
@@ -46,7 +46,13 @@ for (let i = 0; i < 1000; i += 1) {
 }
 
 const App: React.FC = () => {
-  return <Table columns={columns} dataSource={data} />;
+  const ref = useRef<HTMLDivElement>(null);
+
+  return (
+    <div ref={ref}>
+      <Table columns={columns} dataSource={data} />
+    </div>
+  );
 };
 
 export default App;

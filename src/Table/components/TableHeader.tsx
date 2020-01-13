@@ -1,6 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
-import { ParsedColumn } from '../hooks/useColumnsParse';
+import { ParsedColumn } from '../utils/parseColumns';
 
 export interface TableHeaderProps {
   columns: ParsedColumn[];

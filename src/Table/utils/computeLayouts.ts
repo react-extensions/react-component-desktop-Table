@@ -1,4 +1,4 @@
-import { ParsedColumn } from '../hooks/useColumnsParse';
+import { ParsedColumn } from './parseColumns';
 import { ColMinWidths } from './computeColumnMinWidths';
 
 export interface ColumnWidths {
