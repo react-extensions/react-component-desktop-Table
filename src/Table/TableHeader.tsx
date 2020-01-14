@@ -1,18 +1,20 @@
 import React from 'react';
 import classnames from 'classnames';
-import { ParsedColumn } from '../utils/parseColumns';
+import { ParsedColumn } from './utils/parseColumns';
+import useTableConfig from './useTableConfig';
 
 export interface TableHeaderProps {
   columns: ParsedColumn[];
 }
 
 const TableHeader = ({ columns }: TableHeaderProps) => {
+  const { clsPrefix } = useTableConfig();
   return (
     <thead>
-      <tr className="r-tr">
+      <tr className={`${clsPrefix}-tr`}>
         {columns.map(col => {
           const { __key, className, title } = col;
-          const _className = classnames('r-th', className);
+          const _className = classnames(`${clsPrefix}-th`, className);
           return (
             <th key={__key} className={_className}>
               {
@@ -20,8 +22,8 @@ const TableHeader = ({ columns }: TableHeaderProps) => {
                 // 所以如果 在th td内有绝对定位的元素，样式会出问题
                 // 加一层div, 并将其style设置为position:relative ，来标准化这一样式
               }
-              <div className="r-th-content-wrap">
-                <span className="r-th-content">{title}</span>
+              <div className={`${clsPrefix}-th-wrap`}>
+                <span className={`${clsPrefix}-th-title`}>{title}</span>
               </div>
             </th>
           );

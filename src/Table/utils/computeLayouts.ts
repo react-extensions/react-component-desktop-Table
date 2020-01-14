@@ -5,11 +5,19 @@ export interface ColumnWidths {
   [key: string]: number;
 }
 
+export interface Layouts {
+  totalTableWidth: number;
+  fixedLeftTableWidth: number;
+  fixedRightTableWidth: number;
+  mainTableWidth: number;
+  colWidths: ColumnWidths;
+}
+
 export default function computeLayouts(
   _containerWidth: number,
   columns: ParsedColumn[],
   colMinWidths: ColMinWidths
-) {
+): Layouts {
   const containerWidth = _containerWidth - /* this.scrollBarY */ 17;
   let totalColsWidth = 0;
   let cannotExpandTotalWidth = 0;

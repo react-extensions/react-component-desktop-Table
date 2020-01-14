@@ -5,7 +5,15 @@ export interface ParsedColumn extends Column {
   __key: number;
 }
 
-export default function parseColumns(columns: Column[]) {
+export interface ParsedData {
+  fixedLeftCols: ParsedColumn[];
+  fixedRightCols: ParsedColumn[];
+  mainCols: ParsedColumn[];
+  allCols: ParsedColumn[];
+  colMinWidths: ColMinWidths;
+}
+
+export default function parseColumns(columns: Column[]): ParsedData {
   // 处理 columns
   const fixedLeftCols: ParsedColumn[] = [];
   const fixedRightCols: ParsedColumn[] = [];
@@ -55,10 +63,6 @@ export default function parseColumns(columns: Column[]) {
     allCols.push(parsedColumn);
   }
 
-  const hasLeft = fixedLeftCols.length > 0;
-  const hasRight = fixedRightCols.length > 0;
-  const hasFixed = hasLeft || hasRight;
-
   // 最小列宽
   const colMinWidths: ColMinWidths = getColumnMinWidths(allCols);
 
@@ -68,9 +72,6 @@ export default function parseColumns(columns: Column[]) {
     mainCols,
     allCols,
     // tableCheckType,
-    hasLeft,
-    hasRight,
-    hasFixed,
     colMinWidths,
   };
 }

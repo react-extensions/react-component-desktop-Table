@@ -1,6 +1,6 @@
 import React from 'react';
-import { ParsedColumn } from '../utils/parseColumns';
-import { ColumnWidths } from '../utils/computeLayouts';
+import { ParsedColumn } from './utils/parseColumns';
+import { ColumnWidths } from './utils/computeLayouts';
 
 interface ColGroupProps {
   columns: ParsedColumn[];
