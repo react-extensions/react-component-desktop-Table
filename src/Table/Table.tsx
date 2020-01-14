@@ -28,46 +28,83 @@ export interface Column {
 }
 
 export interface TableProps {
-  dataSource: RowDataSource[];
-  columns: Column[];
-  className?: string;
+  /* 布局 */
   align?: Align;
-  layoutMode?: LayoutMode;
-  rowKey: string;
-  useSplitLayout?: boolean;
+  columns: Column[];
   dragAble?: boolean;
-  loading?: boolean;
   width?: number;
   height?: number;
+  layoutMode?: LayoutMode;
+  useSplitLayout?: boolean;
+
+  /* 其它 */
+  className?: string;
+  dataSource: RowDataSource[];
+  rowKey: string;
+  loading?: boolean;
 }
 
 const Table = (props: TableProps) => {
-  const { columns, className, layoutMode, dragAble, useSplitLayout, width, dataSource, rowKey } = props;
-  const [containerRef, meta, layouts] = useLayouts(columns, width);
+  const {
+    align,
+    columns,
+    dragAble,
+    width,
+    layoutMode,
+    useSplitLayout,
+
+    /*  */
+    className,
+    dataSource,
+    rowKey,
+  } = props;
+  const [containerRef, meta, layouts] = useLayouts(
+    useTileLayout,
+    columns,
+    width
+  );
   const { fixedLeftCols, fixedRightCols } = meta;
+
   const hasLeft = fixedLeftCols.length > 0;
+
   const hasRight = fixedRightCols.length > 0;
+
   const hasFixed = hasLeft || hasRight;
+
   // 使用平铺布局
   // TODO: 是否第一次确定后，以后不可更改
   const useTileLayout = hasFixed || dragAble || layoutMode === 'tile';
+
   // 使用分体式布局
   const _useSplitLayout = hasFixed /* || !!tableHeight */ || useSplitLayout;
 
   const { clsPrefix } = useTableConfig();
+
   // 表格类名
-  const _className = useMemo(() => classnames(`${clsPrefix}-table-container`, className), [className, clsPrefix]);
+  const _className = useMemo(
+    () => classnames(`${clsPrefix}-table-container`, className),
+    [className, clsPrefix]
+  );
 
   const render = () => {
     if (!_useSplitLayout) {
-      return (
-        <TableBase
-          colGroup={<ColGroup columns={meta.mainCols} colWidths={layouts.colWidths} />}
-          tHead={<TableHeader columns={meta.mainCols} />}
-          tBody={<TableBodyBase columns={meta.mainCols} dataSource={dataSource} rowKey={rowKey} />}
+      const colGroup = (
+        <ColGroup columns={meta.mainCols} colWidths={layouts.colWidths} />
+      );
+
+      const tHead = <TableHeader columns={meta.mainCols} />;
+
+      const tBody = (
+        <TableBodyBase
+          columns={meta.mainCols}
+          dataSource={dataSource}
+          rowKey={rowKey}
         />
       );
+
+      return <TableBase colGroup={colGroup} tHead={tHead} tBody={tBody} />;
     }
+
     return null;
   };
 
