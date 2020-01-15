@@ -711,6 +711,7 @@ const renderTHead = function(columns) {
     const checkStatus = this.computeCheckStatus();
 
     let Icon = null;
+    
     switch (checkStatus) {
       case CHECKED:
         Icon = tableConfig.icon.Check;

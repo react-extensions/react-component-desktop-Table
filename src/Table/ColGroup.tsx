@@ -1,13 +1,15 @@
 import React from 'react';
 import { ParsedColumn } from './utils/parseColumns';
 import { ColumnWidths } from './utils/computeLayouts';
+import { ColMinWidths } from './utils/computeColumnMinWidths';
 
 interface ColGroupProps {
   columns: ParsedColumn[];
+  colMinWidths: ColMinWidths;
   colWidths: ColumnWidths;
 }
 
-function ColGroup({ columns, colWidths }: ColGroupProps) {
+function ColGroup({ columns, colMinWidths, colWidths }: ColGroupProps) {
   if (!columns.length) {
     return null;
   }
@@ -17,7 +19,7 @@ function ColGroup({ columns, colWidths }: ColGroupProps) {
         <col
           key={__key}
           style={{
-            minWidth: colWidths[__key],
+            minWidth: colMinWidths[__key],
             width: colWidths[__key],
           }}
         />

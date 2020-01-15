@@ -4,42 +4,42 @@ import { Column } from './Table/Table';
 
 const columns: Column[] = [
   {
-    title: 'a',
-    dataIndex: 'a',
+    title: 'one',
+    dataIndex: 'one',
   },
   {
-    title: 'b',
+    title: 'two',
     width: 350,
     dataIndex: 'b',
   },
   {
-    title: 'c',
+    title: 'three',
     width: 350,
     dataIndex: 'c',
   },
   {
-    title: 'e',
+    title: 'four',
   },
   {
-    title: 'f',
+    title: 'five',
   },
   {
-    title: 'g',
+    title: 'six',
   },
   {
-    title: 'h',
+    title: 'seven',
   },
 ];
 const data = [
   {
-    a: '第一行，第一列',
+    one: '第一行，第一列',
     b: '第一行，第二列',
     c: '第一行，第三列',
   },
 ];
-for (let i = 0; i < 1000; i += 1) {
+for (let i = 0; i < 100; i += 1) {
   data.push({
-    a: String(i),
+    one: String(i),
     b: '你哈搜集回复的萨芬理解；乐山大佛案说法啥都',
     c: 'aasdfsdafsfdafsadfsdafsadfasfasd dfsfsafsd',
   });
@@ -50,7 +50,7 @@ const App: React.FC = () => {
 
   return (
     <div ref={ref}>
-      <Table columns={columns} dataSource={data} rowKey="a" />
+      <Table columns={columns} dataSource={data} rowKey="a" useSplitLayout />
     </div>
   );
 };

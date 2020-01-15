@@ -1,17 +1,15 @@
 import { useMemo, useEffect, useRef, useState } from 'react';
-import parseColumns, { ParsedData } from './utils/parseColumns';
 import computeLayouts, { Layouts } from './utils/computeLayouts';
-import { Column } from './Table';
+import { ParsedColumn } from './useColumnsParser';
+import { ColMinWidths } from './utils/computeColumnMinWidths';
 
 export default function useLayouts(
+  allCols: ParsedColumn[],
+  colMinWidths: ColMinWidths,
   useTileLayout: boolean,
-  columns: Column[],
   width?: number
-): [React.MutableRefObject<HTMLDivElement | null>, ParsedData, Layouts] {
+): [React.MutableRefObject<HTMLDivElement | null>, Layouts] {
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // 预解析columns
-  const meta = useMemo(() => parseColumns(columns), [columns]);
 
   // 根据解析后的数据计算布局
   const [layouts, setLayouts] = useState<Layouts>(() => ({
@@ -31,28 +29,25 @@ export default function useLayouts(
       return;
     }
 
-    const { allCols, colMinWidths } = meta;
-
     const _layouts: Layouts = computeLayouts(
       containerRef.current.clientWidth,
       allCols,
       colMinWidths
     );
+    console.log('useEffect, _layouts', _layouts);
 
     setLayouts(_layouts);
-  }, [meta, useTileLayout, width]);
+  }, [allCols, colMinWidths, useTileLayout, width]);
 
   const layoutsResult = useMemo(() => {
     if (typeof width !== 'undefined' && useTileLayout) {
-      const { allCols, colMinWidths } = meta;
-
       const _layouts: Layouts = computeLayouts(width, allCols, colMinWidths);
-
+      console.log('memo, _layouts', _layouts);
       return _layouts;
     }
 
     return layouts;
-  }, [layouts, meta, useTileLayout, width]);
+  }, [allCols, colMinWidths, layouts, useTileLayout, width]);
 
-  return [containerRef, meta, layoutsResult];
+  return [containerRef, layoutsResult];
 }

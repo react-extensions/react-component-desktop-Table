@@ -6,6 +6,7 @@ import ColGroup from './ColGroup';
 import useLayouts from './useLayouts';
 import TableBodyBase, { RowDataSource } from './TableBodyBase';
 import useTableConfig from './useTableConfig';
+import useColumnsParser from './useColumnsParser';
 import './style.less';
 
 export type Align = 'left' | 'right' | 'center';
@@ -51,19 +52,21 @@ const Table = (props: TableProps) => {
     dragAble,
     width,
     layoutMode,
-    useSplitLayout,
+    useSplitLayout: _useSplitLayout,
 
     /*  */
     className,
     dataSource,
     rowKey,
   } = props;
-  const [containerRef, meta, layouts] = useLayouts(
-    useTileLayout,
-    columns,
-    width
-  );
-  const { fixedLeftCols, fixedRightCols } = meta;
+
+  const {
+    allCols,
+    colMinWidths,
+    mainCols,
+    fixedLeftCols,
+    fixedRightCols,
+  } = useColumnsParser(columns);
 
   const hasLeft = fixedLeftCols.length > 0;
 
@@ -76,9 +79,26 @@ const Table = (props: TableProps) => {
   const useTileLayout = hasFixed || dragAble || layoutMode === 'tile';
 
   // 使用分体式布局
-  const _useSplitLayout = hasFixed /* || !!tableHeight */ || useSplitLayout;
+  const useSplitLayout = hasFixed /* || !!tableHeight */ || _useSplitLayout;
 
   const { clsPrefix } = useTableConfig();
+
+  const [containerRef, layouts] = useLayouts(
+    allCols,
+    colMinWidths,
+    useTileLayout,
+    width
+  );
+
+  const {
+    colWidths,
+    totalTableWidth,
+    mainTableWidth,
+    fixedLeftTableWidth,
+    fixedRightTableWidth,
+  } = layouts;
+
+  console.log('colWidths', colWidths);
 
   // 表格类名
   const _className = useMemo(
@@ -86,27 +106,60 @@ const Table = (props: TableProps) => {
     [className, clsPrefix]
   );
 
-  const render = () => {
-    if (!_useSplitLayout) {
-      const colGroup = (
-        <ColGroup columns={meta.mainCols} colWidths={layouts.colWidths} />
-      );
+  const renderSplitTable = () => {
+    const colGroup = (
+      <ColGroup
+        columns={mainCols}
+        colMinWidths={colMinWidths}
+        colWidths={colWidths}
+      />
+    );
 
-      const tHead = <TableHeader columns={meta.mainCols} />;
+    const tHead = <TableHeader columns={mainCols} />;
 
-      const tBody = (
-        <TableBodyBase
-          columns={meta.mainCols}
-          dataSource={dataSource}
-          rowKey={rowKey}
-        />
-      );
+    const tBody = (
+      <TableBodyBase
+        columns={mainCols}
+        dataSource={dataSource}
+        rowKey={rowKey}
+      />
+    );
 
-      return <TableBase colGroup={colGroup} tHead={tHead} tBody={tBody} />;
-    }
-
-    return null;
+    return (
+      <div>
+        <div>
+          <TableBase colGroup={colGroup} tHead={tHead} />
+        </div>
+        <div>
+          <TableBase colGroup={colGroup} tBody={tBody} />
+        </div>
+      </div>
+    );
   };
+
+  const renderNormalTable = () => {
+    const colGroup = (
+      <ColGroup
+        columns={mainCols}
+        colMinWidths={colMinWidths}
+        colWidths={colMinWidths}
+      />
+    );
+
+    const tHead = <TableHeader columns={mainCols} />;
+
+    const tBody = (
+      <TableBodyBase
+        columns={mainCols}
+        dataSource={dataSource}
+        rowKey={rowKey}
+      />
+    );
+
+    return <TableBase colGroup={colGroup} tHead={tHead} tBody={tBody} />;
+  };
+
+  const render = useSplitLayout ? renderSplitTable : renderNormalTable;
 
   return (
     <div className={_className} ref={containerRef}>
