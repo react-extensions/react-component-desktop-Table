@@ -11,14 +11,17 @@ const columns: Column[] = [
     title: 'two',
     width: 350,
     dataIndex: 'b',
+    fixed: 'left',
   },
   {
     title: 'three',
     width: 350,
     dataIndex: 'c',
+    fixed: 'right',
   },
   {
     title: 'four',
+    width: 150,
   },
   {
     title: 'five',
@@ -50,7 +53,7 @@ const App: React.FC = () => {
 
   return (
     <div ref={ref}>
-      <Table columns={columns} dataSource={data} rowKey="a" useSplitLayout />
+      <Table columns={columns} dataSource={data} rowKey="a" height={500} />
     </div>
   );
 };

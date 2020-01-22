@@ -2,6 +2,7 @@ import { useMemo, useEffect, useRef, useState } from 'react';
 import computeLayouts, { Layouts } from './utils/computeLayouts';
 import { ParsedColumn } from './useColumnsParser';
 import { ColMinWidths } from './utils/computeColumnMinWidths';
+import ColGroup from './ColGroup';
 
 export default function useLayouts(
   allCols: ParsedColumn[],

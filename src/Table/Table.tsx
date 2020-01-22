@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import classnames from 'classnames';
-import TableBase from './TableBase';
 import TableHeader from './TableHeader';
 import ColGroup from './ColGroup';
 import useLayouts from './useLayouts';
 import TableBodyBase, { RowDataSource } from './TableBodyBase';
 import useTableConfig from './useTableConfig';
 import useColumnsParser from './useColumnsParser';
+import SplitTable from './SplitTable';
 import './style.less';
 
 export type Align = 'left' | 'right' | 'center';
@@ -36,7 +36,6 @@ export interface TableProps {
   width?: number;
   height?: number;
   layoutMode?: LayoutMode;
-  useSplitLayout?: boolean;
 
   /* 其它 */
   className?: string;
@@ -45,14 +44,21 @@ export interface TableProps {
   loading?: boolean;
 }
 
-const Table = (props: TableProps) => {
+const defaultProps = {
+  dataSources: [],
+  className: undefined,
+  layoutMode: 'stretch',
+};
+
+type DefaultProps = Readonly<typeof defaultProps>;
+
+const Table = (props: TableProps & DefaultProps) => {
   const {
-    align,
     columns,
     dragAble,
     width,
+    height,
     layoutMode,
-    useSplitLayout: _useSplitLayout,
 
     /*  */
     className,
@@ -78,9 +84,6 @@ const Table = (props: TableProps) => {
   // TODO: 是否第一次确定后，以后不可更改
   const useTileLayout = hasFixed || dragAble || layoutMode === 'tile';
 
-  // 使用分体式布局
-  const useSplitLayout = hasFixed /* || !!tableHeight */ || _useSplitLayout;
-
   const { clsPrefix } = useTableConfig();
 
   const [containerRef, layouts] = useLayouts(
@@ -98,68 +101,42 @@ const Table = (props: TableProps) => {
     fixedRightTableWidth,
   } = layouts;
 
-  console.log('colWidths', colWidths);
+  const colGroup = useMemo(
+    () => (
+      <ColGroup
+        columns={mainCols}
+        colMinWidths={colMinWidths}
+        colWidths={useTileLayout ? colWidths : colMinWidths}
+      />
+    ),
+    [colMinWidths, colWidths, mainCols, useTileLayout]
+  );
+
+  const tHead = <TableHeader columns={mainCols} />;
+
+  const tBody = (
+    <TableBodyBase columns={mainCols} dataSource={dataSource} rowKey={rowKey} />
+  );
+
+  const render = () => {
+    return (
+      <SplitTable
+        colGroup={colGroup}
+        tHead={tHead}
+        tBody={tBody}
+        height={height}
+        totalTableWidth={totalTableWidth}
+        mainTableWidth={mainTableWidth}
+        fixedLeftTableWidth={fixedLeftTableWidth}
+      />
+    );
+  };
 
   // 表格类名
   const _className = useMemo(
     () => classnames(`${clsPrefix}-table-container`, className),
     [className, clsPrefix]
   );
-
-  const renderSplitTable = () => {
-    const colGroup = (
-      <ColGroup
-        columns={mainCols}
-        colMinWidths={colMinWidths}
-        colWidths={colWidths}
-      />
-    );
-
-    const tHead = <TableHeader columns={mainCols} />;
-
-    const tBody = (
-      <TableBodyBase
-        columns={mainCols}
-        dataSource={dataSource}
-        rowKey={rowKey}
-      />
-    );
-
-    return (
-      <div>
-        <div>
-          <TableBase colGroup={colGroup} tHead={tHead} />
-        </div>
-        <div>
-          <TableBase colGroup={colGroup} tBody={tBody} />
-        </div>
-      </div>
-    );
-  };
-
-  const renderNormalTable = () => {
-    const colGroup = (
-      <ColGroup
-        columns={mainCols}
-        colMinWidths={colMinWidths}
-        colWidths={colMinWidths}
-      />
-    );
-
-    const tHead = <TableHeader columns={mainCols} />;
-
-    const tBody = (
-      <TableBodyBase
-        columns={mainCols}
-        dataSource={dataSource}
-        rowKey={rowKey}
-      />
-    );
-
-    return <TableBase colGroup={colGroup} tHead={tHead} tBody={tBody} />;
-  };
-
-  const render = useSplitLayout ? renderSplitTable : renderNormalTable;
 
   return (
     <div className={_className} ref={containerRef}>
@@ -168,11 +145,6 @@ const Table = (props: TableProps) => {
   );
 };
 
-Table.defaultProps = {
-  dataSources: [],
-  className: undefined,
-  layoutMode: 'stretch',
-  useSplitLayout: false,
-};
+Table.defaultProps = defaultProps;
 
 export default React.memo(Table);
